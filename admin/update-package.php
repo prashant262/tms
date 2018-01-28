@@ -18,23 +18,14 @@ $pprice=$_POST['packageprice'];
 $pfeatures=$_POST['packagefeatures'];
 $pdetails=$_POST['packagedetails'];	
 $pimage=$_FILES["packageimage"]["name"];
-$sql="update TblTourPackages set PackageName=:pname,PackageType=:ptype,PackageLocation=:plocation,PackagePrice=:pprice,PackageFetures=:pfeatures,PackageDetails=:pdetails,categoryId=:catid where PackageId=:pid";
-$query = $dbh->prepare($sql);
-$query->bindParam(':pname',$pname,PDO::PARAM_STR);
-$query->bindParam(':ptype',$ptype,PDO::PARAM_STR);
-$query->bindParam(':plocation',$plocation,PDO::PARAM_STR);
-$query->bindParam(':pprice',$pprice,PDO::PARAM_STR);
-$query->bindParam(':pfeatures',$pfeatures,PDO::PARAM_STR);
-$query->bindParam(':pdetails',$pdetails,PDO::PARAM_STR);
-$query->bindParam(':pid',$pid,PDO::PARAM_STR);
-$query->bindParam(':catid',$catid,PDO::PARAM_STR);
-$query->execute();
+$sql="update TblTourPackages set PackageName='$pname',PackageType='$ptype',PackageLocation='$plocation',PackagePrice='$pprice',PackageFetures='$pfeatures',PackageDetails='$pdetails',categoryId='$catid' where PackageId='$pid'";
+$mysqli->query($sql);
 $msg="Package Updated Successfully";
 }
 
-$query = $dbh->prepare("select * from tblcategories");
-$query-> execute();
-$result_category = $query -> fetchAll(PDO::FETCH_OBJ);
+$query = $mysqli->query("select * from tblcategories");
+$result_category = fetchResult($query);
+$query->close();
 
 	?>
 <!DOCTYPE HTML>
@@ -102,13 +93,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						
 <?php 
 $pid=intval($_GET['pid']);
-$sql = "SELECT * from TblTourPackages where PackageId=:pid";
-$query = $dbh -> prepare($sql);
-$query -> bindParam(':pid', $pid, PDO::PARAM_STR);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
+$sql = "SELECT * from TblTourPackages where PackageId='$pid'";
+$query = $mysqli -> query($sql);
+$results=fetchResult($query);
+$query->close();
 $cnt=1;
-if($query->rowCount() > 0)
+if(count($results) > 0)
 {
 foreach($results as $result)
 {	?>
@@ -117,7 +107,7 @@ foreach($results as $result)
 								<div class="form-group">
 									<label for="focusedinput" class="col-sm-2 control-label">Package Name</label>
 									<div class="col-sm-8">
-										<input type="text" class="form-control1" name="packagename" id="packagename" placeholder="Create Package" value="<?php echo htmlentities($result->PackageName);?>" required>
+										<input type="text" class="form-control1" name="packagename" id="packagename" placeholder="Create Package" value="<?php echo htmlentities($result["PackageName"]);?>" required>
 									</div>
 								</div>
 
@@ -126,7 +116,7 @@ foreach($results as $result)
 									<div class="col-sm-8">
 										<select class="form-control1" name="categoryid" id="categoryid" required>
 									<?php	foreach($result_category as $cat){ ?>
-												<option value="<?= $cat->id ?>" <?= ($cat->id == $result->categoryId) ? "selected" : "" ?>><?= $cat->name ?></option>
+												<option value="<?= $cat["id"] ?>" <?= ($cat["id"] == $result["categoryId"]) ? "selected" : "" ?>><?= $cat["name"] ?></option>
 									<?php	} ?>
 										</select>
 									</div>
@@ -135,28 +125,28 @@ foreach($results as $result)
 <div class="form-group">
 									<label for="focusedinput" class="col-sm-2 control-label">Package Type</label>
 									<div class="col-sm-8">
-										<input type="text" class="form-control1" name="packagetype" id="packagetype" placeholder=" Package Type eg- Family Package / Couple Package" value="<?php echo htmlentities($result->PackageType);?>" required>
+										<input type="text" class="form-control1" name="packagetype" id="packagetype" placeholder=" Package Type eg- Family Package / Couple Package" value="<?php echo htmlentities($result["PackageType"]);?>" required>
 									</div>
 								</div>
 
 <div class="form-group">
 									<label for="focusedinput" class="col-sm-2 control-label">Package Location</label>
 									<div class="col-sm-8">
-										<input type="text" class="form-control1" name="packagelocation" id="packagelocation" placeholder=" Package Location" value="<?php echo htmlentities($result->PackageLocation);?>" required>
+										<input type="text" class="form-control1" name="packagelocation" id="packagelocation" placeholder=" Package Location" value="<?php echo htmlentities($result["PackageLocation"]);?>" required>
 									</div>
 								</div>
 
 <div class="form-group">
 									<label for="focusedinput" class="col-sm-2 control-label">Package Price in USD</label>
 									<div class="col-sm-8">
-										<input type="text" class="form-control1" name="packageprice" id="packageprice" placeholder=" Package Price is USD" value="<?php echo htmlentities($result->PackagePrice);?>" required>
+										<input type="text" class="form-control1" name="packageprice" id="packageprice" placeholder=" Package Price is USD" value="<?php echo htmlentities($result["PackagePrice"]);?>" required>
 									</div>
 								</div>
 
 <div class="form-group">
 									<label for="focusedinput" class="col-sm-2 control-label">Package Features</label>
 									<div class="col-sm-8">
-										<input type="text" class="form-control1" name="packagefeatures" id="packagefeatures" placeholder="Package Features Eg-free Pickup-drop facility" value="<?php echo htmlentities($result->PackageFetures);?>" required>
+										<input type="text" class="form-control1" name="packagefeatures" id="packagefeatures" placeholder="Package Features Eg-free Pickup-drop facility" value="<?php echo htmlentities($result["PackageFetures"]);?>" required>
 									</div>
 								</div>		
 
@@ -164,20 +154,20 @@ foreach($results as $result)
 <div class="form-group">
 									<label for="focusedinput" class="col-sm-2 control-label">Package Details</label>
 									<div class="col-sm-8">
-										<textarea class="form-control ckeditor" rows="5" cols="50" name="packagedetails" id="packagedetails" placeholder="Package Details" required><?php echo htmlentities($result->PackageDetails);?></textarea> 
+										<textarea class="form-control ckeditor" rows="5" cols="50" name="packagedetails" id="packagedetails" placeholder="Package Details" required><?php echo htmlentities($result["PackageDetails"]);?></textarea> 
 									</div>
 								</div>															
 <div class="form-group">
 <label for="focusedinput" class="col-sm-2 control-label">Package Image</label>
 <div class="col-sm-8">
-<img src="pacakgeimages/<?php echo htmlentities($result->PackageImage);?>" width="200">&nbsp;&nbsp;&nbsp;<a href="change-image.php?imgid=<?php echo htmlentities($result->PackageId);?>">Change Image</a>
+<img src="pacakgeimages/<?php echo htmlentities($result["PackageImage"]);?>" width="200">&nbsp;&nbsp;&nbsp;<a href="change-image.php?imgid=<?php echo htmlentities($result["PackageId"]);?>">Change Image</a>
 </div>
 </div>
 
 <div class="form-group">
 									<label for="focusedinput" class="col-sm-2 control-label">Last Updation Date</label>
 									<div class="col-sm-8">
-<?php echo htmlentities($result->UpdationDate);?>
+<?php echo htmlentities($result["UpdationDate"]);?>
 									</div>
 								</div>		
 								<?php }} ?>
@@ -268,4 +258,6 @@ foreach($results as $result)
 
 </body>
 </html>
-<?php } ?>
+<?php } 
+$mysqli->close();
+?>

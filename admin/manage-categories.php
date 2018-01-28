@@ -6,39 +6,6 @@ if(strlen($_SESSION['alogin'])==0)
 	{	
 header('location:index.php');
 }
-else{ 
-	// code for cancel
-if(isset($_REQUEST['bkid']))
-	{
-$bid=intval($_GET['bkid']);
-$status=2;
-$cancelby='a';
-$sql = "UPDATE tblbooking SET status=:status,CancelledBy=:cancelby WHERE  BookingId=:bid";
-$query = $dbh->prepare($sql);
-$query -> bindParam(':status',$status, PDO::PARAM_STR);
-$query -> bindParam(':cancelby',$cancelby , PDO::PARAM_STR);
-$query-> bindParam(':bid',$bid, PDO::PARAM_STR);
-$query -> execute();
-
-$msg="Booking Cancelled successfully";
-}
-
-
-if(isset($_REQUEST['bckid']))
-	{
-$bcid=intval($_GET['bckid']);
-$status=1;
-$cancelby='a';
-$sql = "UPDATE tblbooking SET status=:status WHERE BookingId=:bcid";
-$query = $dbh->prepare($sql);
-$query -> bindParam(':status',$status, PDO::PARAM_STR);
-$query-> bindParam(':bcid',$bcid, PDO::PARAM_STR);
-$query -> execute();
-$msg="Booking Confirm successfully";
-}
-
-
-
 
 	?>
 <!DOCTYPE HTML>
@@ -136,17 +103,17 @@ $msg="Booking Confirm successfully";
 						</thead>
 						<tbody>
 <?php $sql = "select * from tblcategories where parent_id=0";
-$query = $dbh -> prepare($sql);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
+$query = $mysqli -> query($sql);
+$results=fetchResult($query);
+$query->close();
 $cnt=1;
-if($query->rowCount() > 0)
+if(count($results) > 0)
 {
 foreach($results as $result)
 {				?>		
 						  <tr>
-							<td>#CAT-<?php echo htmlentities($result->id);?></td>
-								<td><?php echo htmlentities($result->name);?></td>
+							<td>#CAT-<?php echo htmlentities($result["id"]);?></td>
+								<td><?php echo htmlentities($result["name"]);?></td>
 								<td><a href="#">Manage</a></td>
 
 <td><a href="#">Edit</a></td>
@@ -220,4 +187,6 @@ foreach($results as $result)
 
 </body>
 </html>
-<?php } ?>
+<?php  
+$mysqli->close();
+?>

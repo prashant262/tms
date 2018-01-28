@@ -18,18 +18,9 @@ $pfeatures=$_POST['packagefeatures'];
 $pdetails=$_POST['packagedetails'];	
 $pimage=$_FILES["packageimage"]["name"];
 move_uploaded_file($_FILES["packageimage"]["tmp_name"],"pacakgeimages/".$_FILES["packageimage"]["name"]);
-$sql="INSERT INTO TblTourPackages(PackageName,PackageType,PackageLocation,PackagePrice,PackageFetures,PackageDetails,PackageImage,categoryId) VALUES(:pname,:ptype,:plocation,:pprice,:pfeatures,:pdetails,:pimage,:catid)";
-$query = $dbh->prepare($sql);
-$query->bindParam(':pname',$pname,PDO::PARAM_STR);
-$query->bindParam(':ptype',$ptype,PDO::PARAM_STR);
-$query->bindParam(':plocation',$plocation,PDO::PARAM_STR);
-$query->bindParam(':pprice',$pprice,PDO::PARAM_STR);
-$query->bindParam(':pfeatures',$pfeatures,PDO::PARAM_STR);
-$query->bindParam(':pdetails',$pdetails,PDO::PARAM_STR);
-$query->bindParam(':pimage',$pimage,PDO::PARAM_STR);
-$query->bindParam(':catid',$catid,PDO::PARAM_STR);
-$query->execute();
-$lastInsertId = $dbh->lastInsertId();
+$sql="INSERT INTO TblTourPackages(PackageName,PackageType,PackageLocation,PackagePrice,PackageFetures,PackageDetails,PackageImage,categoryId) VALUES('$pname','$ptype','$plocation','$pprice','$pfeatures','$pdetails','$pimage','$catid')";
+$mysqli->query($sql);
+$lastInsertId = $mysqli->insert_id;
 if($lastInsertId)
 {
 $msg="Package Created Successfully";
@@ -41,9 +32,9 @@ $error="Something went wrong. Please try again";
 
 }
 
-$query = $dbh->prepare("select * from tblcategories");
-$query-> execute();
-$result_category = $query -> fetchAll(PDO::FETCH_OBJ);
+$query = $mysqli->query("select * from tblcategories");
+$result_category = fetchResult($query);
+$query->close();
 
 	?>
 <!DOCTYPE HTML>
@@ -121,7 +112,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									<div class="col-sm-8">
 										<select class="form-control1" name="categoryid" id="categoryid" required>
 									<?php	foreach($result_category as $cat){ ?>
-												<option value="<?= $cat->id ?>"><?= $cat->name ?></option>
+												<option value="<?= $cat["id"] ?>"><?= $cat["name"] ?></option>
 									<?php	} ?>
 										</select>
 									</div>
@@ -257,4 +248,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 </body>
 </html>
-<?php } ?>
+<?php } 
+$mysqli->close();
+?>

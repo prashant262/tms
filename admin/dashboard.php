@@ -52,10 +52,10 @@ else{
 								<h3>User</h3>
 
 								<?php $sql = "SELECT id from tblusers";
-$query = $dbh -> prepare($sql);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
-$cnt=$query->rowCount();
+$query = $mysqli -> query($sql);
+$results=fetchResult($query);
+$query->close();
+$cnt=count($results);
 					?>			<h4> <?php echo htmlentities($cnt);?> </h4>
 				
 								
@@ -71,10 +71,10 @@ $cnt=$query->rowCount();
 							<div class="four-text">
 								<h3>Bookings</h3>
 										<?php $sql1 = "SELECT BookingId from tblbooking";
-$query1 = $dbh -> prepare($sql1);
-$query1->execute();
-$results1=$query1->fetchAll(PDO::FETCH_OBJ);
-$cnt1=$query1->rowCount();
+$query1 = $mysqli -> query($sql1);
+$results1=fetchResult($query1);
+$query1->close();
+$cnt1=count($results1);
 					?>
 								<h4><?php echo htmlentities($cnt1);?></h4>
 
@@ -90,10 +90,10 @@ $cnt1=$query1->rowCount();
 							<div class="four-text">
 								<h3>Enquiries</h3>
 												<?php $sql2 = "SELECT id from tblenquiry";
-$query2= $dbh -> prepare($sql2);
-$query2->execute();
-$results2=$query2->fetchAll(PDO::FETCH_OBJ);
-$cnt2=$query2->rowCount();
+$query2= $mysqli -> query($sql2);
+$results2=fetchResult($query2);
+$query2->close();
+$cnt2=count($results2);
 					?>
 								<h4><?php echo htmlentities($cnt2);?></h4>
 								
@@ -109,10 +109,10 @@ $cnt2=$query2->rowCount();
 							<div class="four-text">
 								<h3>Toatal packages</h3>
 																	<?php $sql3 = "SELECT PackageId from tbltourpackages";
-$query3= $dbh -> prepare($sql3);
-$query3->execute();
-$results3=$query3->fetchAll(PDO::FETCH_OBJ);
-$cnt3=$query3->rowCount();
+$query3= $mysqli -> query($sql3);
+$results3=fetchResult($query3);
+$query3->close();
+$cnt3=count($results3);
 					?>
 								<h4><?php echo htmlentities($cnt3);?></h4>
 								
@@ -132,10 +132,10 @@ $cnt3=$query3->rowCount();
 							<div class="four-text">
 								<h3>Issues Riaised</h3>
 												<?php $sql5 = "SELECT id from tblissues";
-$query5= $dbh -> prepare($sql5);
-$query5->execute();
-$results5=$query5->fetchAll(PDO::FETCH_OBJ);
-$cnt5=$query5->rowCount();
+$query5= $mysqli -> query($sql5);
+$results5=fetchResult($query5);
+$query5->close();
+$cnt5=count($results5);
 					?>
 								<h4><?php echo htmlentities($cnt5);?></h4>
 								
@@ -249,4 +249,6 @@ $cnt5=$query5->rowCount();
 	</script>
 </body>
 </html>
-<?php } ?>
+<?php } 
+$mysqli->close();
+?>

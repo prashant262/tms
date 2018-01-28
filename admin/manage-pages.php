@@ -11,11 +11,8 @@ if($_POST['submit']=="Update")
 {
 	$pagetype=$_GET['type'];
 	$pagedetails=$_POST['pgedetails'];
-$sql = "UPDATE tblpages SET detail=:pagedetails WHERE type=:pagetype";
-$query = $dbh->prepare($sql);
-$query -> bindParam(':pagetype',$pagetype, PDO::PARAM_STR);
-$query-> bindParam(':pagedetails',$pagedetails, PDO::PARAM_STR);
-$query -> execute();
+$sql = "UPDATE tblpages SET detail='$pagedetails' WHERE type='$pagetype'";
+$mysqli->query($sql);
 $msg="Page data updated  successfully";
 
 }
@@ -202,17 +199,16 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 										<textarea class="form-control" rows="5" cols="50" name="pgedetails" id="pgedetails" placeholder="Package Details" required>
 										<?php 
 $pagetype=$_GET['type'];
-$sql = "SELECT detail from tblpages where type=:pagetype";
-$query = $dbh -> prepare($sql);
-$query->bindParam(':pagetype',$pagetype,PDO::PARAM_STR);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
+$sql = "SELECT detail from tblpages where type='$pagetype'";
+$query = $mysqli -> query($sql);
+$results=fetchResult($query);
+$query->close();
 $cnt=1;
-if($query->rowCount() > 0)
+if(count($results) > 0)
 {
 foreach($results as $result)
 {		
-echo htmlentities($result->detail);
+echo htmlentities($result["detail"]);
 }}
 ?>
 
@@ -309,4 +305,6 @@ echo htmlentities($result->detail);
 
 </body>
 </html>
-<?php } ?>
+<?php } 
+$mysqli->close();
+?>

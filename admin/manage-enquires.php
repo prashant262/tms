@@ -13,11 +13,8 @@ if(isset($_REQUEST['eid']))
 $eid=intval($_GET['eid']);
 $status=1;
 
-$sql = "UPDATE tblenquiry SET Status=:status WHERE  id=:eid";
-$query = $dbh->prepare($sql);
-$query -> bindParam(':status',$status, PDO::PARAM_STR);
-$query-> bindParam(':eid',$eid, PDO::PARAM_STR);
-$query -> execute();
+$sql = "UPDATE tblenquiry SET Status='$status' WHERE  id='$eid'";
+$mysqli->query($sql);
 
 $msg="Enquiry  successfully read";
 }
@@ -127,31 +124,31 @@ $msg="Enquiry  successfully read";
 						</thead>
 						<tbody>
 <?php $sql = "SELECT * from tblenquiry";
-$query = $dbh -> prepare($sql);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
+$query = $mysqli -> query($sql);
+$results=fetchResult($query);
+$query->close();
 
-if($query->rowCount() > 0)
+if(count($results) > 0)
 {
 foreach($results as $result)
 {				?>		
 						  <tr>
-							<td width="120">#TCKT-<?php echo htmlentities($result->id);?></td>
-							<td width="50"><?php echo htmlentities($result->FullName);?></td>
-								<td width="50"><?php echo htmlentities($result->MobileNumber);?> /<br />
-								<?php echo $result->EmailId;?></td>
+							<td width="120">#TCKT-<?php echo htmlentities($result["id"]);?></td>
+							<td width="50"><?php echo htmlentities($result["FullName"]);?></td>
+								<td width="50"><?php echo htmlentities($result["MobileNumber"]);?> /<br />
+								<?php echo $result["EmailId"];?></td>
 							
 						
-							<td width="200"><?php echo htmlentities($result->Subject);?></a></td>
-							<td width="400"><?php echo htmlentities($result->Description);?></td>
+							<td width="200"><?php echo htmlentities($result["Subject"]);?></a></td>
+							<td width="400"><?php echo htmlentities($result["Description"]);?></td>
 							
-								<td width="50"><?php echo htmlentities($result->PostingDate);?></td>
-								<?php if($result->Status==1)
+								<td width="50"><?php echo htmlentities($result["PostingDate"]);?></td>
+								<?php if($result["Status"]==1)
 {
 	?><td>Read</td>
 <?php } else {?>
 
-<td><a href="manage-enquires.php?eid=<?php echo htmlentities($result->id);?>" onclick="return confirm('Do you really want to read')" >Pending</a>
+<td><a href="manage-enquires.php?eid=<?php echo htmlentities($result["id"]);?>" onclick="return confirm('Do you really want to read')" >Pending</a>
 </td>
 <?php } ?>
 </tr>
@@ -223,4 +220,6 @@ foreach($results as $result)
 
 </body>
 </html>
-<?php } ?>
+<?php } 
+$mysqli->close()
+?>

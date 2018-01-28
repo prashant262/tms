@@ -12,11 +12,8 @@ if(isset($_POST['submit2']))
   {
 $remark=$_POST['remark'];
 
-$sql = "UPDATE tblissues SET AdminRemark=:remark WHERE  id=:iid";
-$query = $dbh->prepare($sql);
-$query -> bindParam(':remark',$remark, PDO::PARAM_STR);
-$query-> bindParam(':iid',$iid, PDO::PARAM_STR);
-$query -> execute();
+$sql = "UPDATE tblissues SET AdminRemark='$remark' WHERE  id='$iid'";
+$mysqli->query($sql);
 
 $msg="Remark  successfully Updated";
 }
@@ -64,18 +61,17 @@ window.print();
 
             <tbody>
 <?php 
-$sql = "SELECT * from tblissues where id=:iid";
-$query = $dbh -> prepare($sql);
-$query-> bindParam(':iid',$iid, PDO::PARAM_STR);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
+$sql = "SELECT * from tblissues where id='$iid'";
+$query = $mysqli -> query($sql);
+$results=fetchResult($query);
+$query->close();
 
-if($query->rowCount() > 0)
+if(count($results) > 0)
 {
 foreach($results as $result)
 { 
 
-  if($result->AdminRemark=="")
+  if($result["AdminRemark"]=="")
   {
 ?>
 
@@ -96,11 +92,11 @@ foreach($results as $result)
     <?php } else { ?>
      <tr>
       <td class="fontkink1" ><b>Remark:</b></td>
-      <td class="fontkink" align="justify" ><?php echo htmlentities($result->AdminRemark);?></td>
+      <td class="fontkink" align="justify" ><?php echo htmlentities($result["AdminRemark"]);?></td>
     </tr>
     <tr>
       <td class="fontkink1" ><b>Remark Date:</b></td>
-      <td class="fontkink" align="justify" ><?php echo htmlentities($result->AdminremarkDate);?></td>
+      <td class="fontkink" align="justify" ><?php echo htmlentities($result["AdminremarkDate"]);?></td>
     </tr>
     <?php }}}?>
     
@@ -113,6 +109,8 @@ foreach($results as $result)
 
 </body>
 </html>
-<?php } ?>
+<?php } 
+$mysqli->close();
+?>
 
      

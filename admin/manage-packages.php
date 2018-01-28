@@ -96,23 +96,22 @@ else{
 						</thead>
 						<tbody>
 <?php $sql = "SELECT * from TblTourPackages";
-$query = $dbh -> prepare($sql);
-//$query -> bindParam(':city', $city, PDO::PARAM_STR);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
+$query = $mysqli -> query($sql);
+$results=fetchResult($query);
+$query->close();
 $cnt=1;
-if($query->rowCount() > 0)
+if(count($results) > 0)
 {
 foreach($results as $result)
 {				?>		
 						  <tr>
 							<td><?php echo htmlentities($cnt);?></td>
-							<td><?php echo htmlentities($result->PackageName);?></td>
-							<td><?php echo htmlentities($result->PackageType);?></td>
-							<td><?php echo htmlentities($result->PackageLocation);?></td>
-							<td>$<?php echo htmlentities($result->PackagePrice);?></td>
-							<td><?php echo htmlentities($result->Creationdate);?></td>
-							<td><a href="update-package.php?pid=<?php echo htmlentities($result->PackageId);?>"><button type="button" class="btn btn-primary btn-block">View Details</button></a></td>
+							<td><?php echo htmlentities($result["PackageName"]);?></td>
+							<td><?php echo htmlentities($result["PackageType"]);?></td>
+							<td><?php echo htmlentities($result["PackageLocation"]);?></td>
+							<td>$<?php echo htmlentities($result["PackagePrice"]);?></td>
+							<td><?php echo htmlentities($result["Creationdate"]);?></td>
+							<td><a href="update-package.php?pid=<?php echo htmlentities($result["PackageId"]);?>"><button type="button" class="btn btn-primary btn-block">View Details</button></a></td>
 						  </tr>
 						 <?php $cnt=$cnt+1;} }?>
 						</tbody>
@@ -182,4 +181,6 @@ foreach($results as $result)
 
 </body>
 </html>
-<?php } ?>
+<?php } 
+$mysqli->close();
+?>
