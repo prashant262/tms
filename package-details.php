@@ -71,16 +71,50 @@ $error="Something went wrong. Please try again";
     -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
     box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
 }
-		</style>				
+		</style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+<link rel="stylesheet" href="css/jquery.fancybox.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+<script src="js/jquery.fancybox.js"></script>				
+
+<script>
+    $(document).ready(function(){
+      $('.slider').bxSlider({
+      	adaptiveHeight:true,
+      });
+    });
+  </script>
+
 </head>
 <body>
 <!-- top-header -->
 <?php include('includes/header.php');?>
+
+<?php 
+
+	$query = $mysqli->query("select * from tblbannerimages where packageId=".intval($_GET['pkgid']));
+	$results=fetchResult($query);
+	$query->close();
+
+	if(count($results) <= 0){
+?>
 <div class="banner-3">
 	<div class="container">
 		
 	</div>
 </div>
+<?php
+	} else{ ?> <div class="slider"> <?php foreach($results as $result){ ?>
+  
+    <a data-fancybox="gallery" href="admin/pacakgeimages/<?= $result["image"] ?>"><img src="admin/pacakgeimages/<?= $result["image"] ?>" class="img-responsive" alt=""></a>
+
+  
+<?php
+	} ?> </div>  <?php }
+	?>
+
 <!--- /banner ---->
 <!--- selectroom ---->
 <div class="selectroom">

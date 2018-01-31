@@ -95,7 +95,7 @@ else{
 						  </tr>
 						</thead>
 						<tbody>
-<?php $sql = "SELECT * from TblTourPackages";
+<?php $sql = "SELECT * from tbltourpackages";
 $query = $mysqli -> query($sql);
 $results=fetchResult($query);
 $query->close();

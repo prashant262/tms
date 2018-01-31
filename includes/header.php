@@ -41,12 +41,13 @@ $query->close();
 	</div>
 </div>
 <?php }?>
+<div id="google_translate_element" style="float:right;"></div>
 <!--- /top-header ---->
 <!--- header ---->
 <div class="header">
 	<div class="container">
 		<div class="logo wow fadeInDown animated" data-wow-delay=".5s">
-			<a href="index.php">JG <span>Camps &amp Resorts</span></a>	
+			<!-- <a href="index.php">JG <span>Camps &amp Resorts</span></a>	 -->
 		</div>
 	
 		<div class="lock fadeInDown animated" data-wow-delay=".5s"> 
@@ -135,4 +136,12 @@ $query->close();
 		<div class="clearfix"></div>
 	</div>
 </div>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 

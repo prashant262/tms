@@ -18,11 +18,20 @@ $pfeatures=$_POST['packagefeatures'];
 $pdetails=$_POST['packagedetails'];	
 $pimage=$_FILES["packageimage"]["name"];
 move_uploaded_file($_FILES["packageimage"]["tmp_name"],"pacakgeimages/".$_FILES["packageimage"]["name"]);
-$sql="INSERT INTO TblTourPackages(PackageName,PackageType,PackageLocation,PackagePrice,PackageFetures,PackageDetails,PackageImage,categoryId) VALUES('$pname','$ptype','$plocation','$pprice','$pfeatures','$pdetails','$pimage','$catid')";
+$sql="INSERT INTO tbltourpackages(PackageName,PackageType,PackageLocation,PackagePrice,PackageFetures,PackageDetails,PackageImage,categoryId) VALUES('$pname','$ptype','$plocation','$pprice','$pfeatures','$pdetails','$pimage','$catid')";
 $mysqli->query($sql);
 $lastInsertId = $mysqli->insert_id;
 if($lastInsertId)
 {
+
+$file_array = reArrayFiles($_FILES['bannerImage']);
+foreach($file_array as $item){
+	$image_name=$item["name"];
+	move_uploaded_file($item["tmp_name"],"pacakgeimages/".$item["name"]);
+	$sql="INSERT INTO tblbannerimages(packageId,image) VALUES('$lastInsertId','$image_name')";
+	$mysqli->query($sql);
+}
+
 $msg="Package Created Successfully";
 }
 else 
@@ -55,6 +64,38 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="css/icon-font.min.css" type='text/css' />
 <script src="ckeditor/ckeditor.js"></script>
+<!-- bootstrap 4.x is supported. You can also use the bootstrap css 3.3.x versions -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.7/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+<!-- if using RTL (Right-To-Left) orientation, load the RTL CSS file after fileinput.css by uncommenting below -->
+<!-- link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.7/css/fileinput-rtl.min.css" media="all" rel="stylesheet" type="text/css" /-->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<!-- piexif.min.js is only needed for restoring exif data in resized images and when you 
+    wish to resize images before upload. This must be loaded before fileinput.min.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.7/js/plugins/piexif.min.js" type="text/javascript"></script>
+<!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. 
+    This must be loaded before fileinput.min.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.7/js/plugins/sortable.min.js" type="text/javascript"></script>
+<!-- purify.min.js is only needed if you wish to purify HTML content in your preview for 
+    HTML files. This must be loaded before fileinput.min.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.7/js/plugins/purify.min.js" type="text/javascript"></script>
+<!-- popper.min.js below is needed if you use bootstrap 4.x. You can also use the bootstrap js 
+   3.3.x versions without popper.min.js. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<!-- bootstrap.min.js below is needed if you wish to zoom and preview file content in a detail modal
+    dialog. bootstrap 4.x is supported. You can also use the bootstrap js 3.3.x versions. -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" type="text/javascript"></script>
+<!-- the main fileinput plugin file -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.7/js/fileinput.min.js"></script>
+<!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.7/themes/fa/theme.js"></script>
+<!-- optionally if you need translation for your language then include  locale file as mentioned below -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.7/js/locales/(lang).js"></script>
+
+<script>
+	$("#input-id").fileinput();
+</script>
+
   <style>
 		.errorWrap {
     padding: 10px;
@@ -159,6 +200,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										<input type="file" name="packageimage" id="packageimage" required>
 									</div>
 								</div>	
+
+<div class="form-group">
+									<label for="focusedinput" class="col-sm-2 control-label">Gallery Images <br>(1600px X 600px)</label>
+									<div class="col-sm-8">
+										<input id="input-id" name="bannerImage[]" type="file" class="file" data-preview-file-type="text" multiple required >
+									</div>
+								</div>
+
+								
 
 								<div class="row">
 			<div class="col-sm-8 col-sm-offset-2">
