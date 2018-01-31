@@ -2,8 +2,8 @@
 
 //Local
 $hostname = "localhost";
-$username = "root";
-$password = "sparx";
+$username = "";
+$password = "";
 $database = "tourism";
 $mysqli = new mysqli($hostname, $username, $password, $database);
 /* check connection */

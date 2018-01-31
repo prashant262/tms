@@ -33,7 +33,7 @@ $query->close();
 				<li class="hm"><a href="admin/index.php">Admin Login</a></li>
 		</ul>
 		<ul class="tp-hd-rgt wow fadeInRight animated" data-wow-delay=".5s"> 
-			<li class="tol">Toll Number : 123-4568790</li>				
+			<li class="tol">Tel Number : 123-4568790</li>				
 			<li class="sig"><a href="#" data-toggle="modal" data-target="#myModal" >Sign Up</a></li> 
 			<li class="sigi"><a href="#" data-toggle="modal" data-target="#myModal4" >/ Sign In</a></li>
         </ul>
@@ -47,7 +47,7 @@ $query->close();
 <div class="header">
 	<div class="container">
 		<div class="logo wow fadeInDown animated" data-wow-delay=".5s">
-			<!-- <a href="index.php">JG <span>Camps &amp Resorts</span></a>	 -->
+			<a href="index.php">JG <span>Camps &amp Resorts</span></a>	
 		</div>
 	
 		<div class="lock fadeInDown animated" data-wow-delay=".5s"> 

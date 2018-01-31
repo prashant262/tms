@@ -128,6 +128,40 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				else if($msg){?><div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?> </div><?php }?>
   	         <div class="tab-content">
 						<div class="tab-pane active" id="horizontal-form">
+<div class="agile-grids">	
+							<div class="agile-tables">
+					<div class="w3l-table-info">
+	<table class="table">
+						<thead>
+						  <tr>
+						  <th>Gallery Image</th>
+							<th>Action </th>
+						  </tr>
+						</thead>
+						<tbody>
+<?php $sql = "select * from tblbannerimages where packageId=".intval($_GET['pid']);
+$query = $mysqli -> query($sql);
+$results=fetchResult($query);
+$query->close();
+$cnt=1;
+if(count($results) > 0)
+{
+foreach($results as $result)
+{				?>		
+						  <tr>
+							<td><img src="pacakgeimages/<?= $result['image'] ?>" style="width:50px;height:50px;"></td>
+
+<td><a href="#">Delete</a></td>
+
+						  </tr>
+						 <?php $cnt=$cnt+1;} }?>
+						</tbody>
+					  </table>
+					</div>
+				  </table>
+				</div>
+			</div>
+		</div>
 						
 <?php 
 $pid=intval($_GET['pid']);
